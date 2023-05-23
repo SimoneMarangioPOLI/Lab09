@@ -2,8 +2,11 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.borders.db.BordersDAO;
+import it.polito.tdp.borders.db.Confini;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +31,23 @@ public class FXMLController {
 
     @FXML
     void doCalcolaConfini(ActionEvent event) {
+    	int anno = Integer.parseInt(txtAnno.getText());
+    	this.model.creaGrafo(anno);
+    	if(this.model.isGraphCreated()) {
+    		txtResult.clear();
+    	txtResult.setText("Grafo fatto" + "\n" +"\n");
+    	}
+    	else {
+    		txtResult.clear();
+    		txtResult.setText("Grafo non fatto" + "\n");
+    	}
+    	BordersDAO dao = new BordersDAO();
+    	List<Confini> lista = dao.getCountrySpecifici(anno);
+    	for(Confini c : lista) {
+    	txtResult.appendText(c.toString() + "\n");
+    	}
+    	txtResult.appendText("\n" + "Il numero di grafi connessi è: " + this.model.calcolaConnesse());
+    	
 
     }
 
